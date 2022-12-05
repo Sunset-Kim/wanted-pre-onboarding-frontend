@@ -15,6 +15,8 @@ function SignUp() {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
 
+  const isPass = validation["id"](id) && validation["password"](password);
+
   useEffect(() => {
     // TODO
     const JWT = LocalStorage.getItem(JWT_STORAGE_KEY);
@@ -26,6 +28,11 @@ function SignUp() {
 
   const handleSubmit = (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (!isPass) {
+      return;
+    }
+
     // TODO: api 호출 전송
     console.log(`API:login or signup ${id}, ${password}`);
 
@@ -38,14 +45,10 @@ function SignUp() {
     const { name, value } = e.target;
 
     if (name === "id") {
-      if (validation["id"](value)) {
-        setId(value);
-      }
+      setId(value);
     }
     if (name === "password") {
-      if (validation["password"](value)) {
-        setPassword(value);
-      }
+      setPassword(value);
     }
   };
 
@@ -61,7 +64,9 @@ function SignUp() {
             <span>Password</span>
             <input type="password" name="password" value={password} onChange={handleChange} />
           </label>
-          <button type="submit">로그인하기</button>
+          <button disabled={!isPass} type="submit">
+            로그인하기
+          </button>
         </form>
       </div>
     </div>
