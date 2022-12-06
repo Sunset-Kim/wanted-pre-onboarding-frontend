@@ -1,4 +1,5 @@
-import { ChangeEvent, SyntheticEvent, useEffect, useState } from "react";
+import { Box, Button, Flex, FormControl, FormErrorMessage, FormLabel, Input, Stack, Text } from "@chakra-ui/react";
+import { ChangeEvent, FormEvent, SyntheticEvent, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 
@@ -9,11 +10,14 @@ const validation = {
 
 function SignUp() {
   const navigate = useNavigate();
-  const [id, setId] = useState("");
-  const [password, setPassword] = useState("");
+  const [id, setId] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
   const { isLoading, isError, data, signIn, signUp, error } = useAuth();
 
-  const isPass = validation["id"](id) && validation["password"](password);
+  const isIdError = !!id && !validation["id"](id);
+  const isPasswordError = !!password && !validation["password"](password);
+
+  const isInValid = !!!id || !!!password || isIdError || isPasswordError;
 
   useEffect(() => {
     if (!data) {
@@ -22,10 +26,10 @@ function SignUp() {
     navigate("/todo");
   }, [data]);
 
-  const handleSubmit = async (e: SyntheticEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-    if (!isPass) {
+    if (isInValid) {
       return;
     }
 
@@ -44,24 +48,38 @@ function SignUp() {
   };
 
   return (
-    <div>
-      <div>
-        <p>{error?.message}</p>
+    <Flex minH="100vh" alignItems="center" justifyContent="center">
+      <Box p="10" shadow="base">
         <form onSubmit={handleSubmit}>
-          <label>
-            <span>Id</span>
-            <input type="text" name="id" value={id} onChange={handleChange} />
-          </label>
-          <label>
-            <span>Password</span>
-            <input type="password" name="password" value={password} onChange={handleChange} />
-          </label>
-          <button disabled={!isPass} type="submit">
-            로그인하기
-          </button>
+          <Stack>
+            <FormControl isInvalid={isIdError}>
+              <FormLabel>Id</FormLabel>
+              <Input type="email" name="id" value={id} onChange={handleChange} autoComplete="username" />
+
+              {isIdError && <FormErrorMessage>E-mail 양식은 반드시 '@'를 포함해야 합니다</FormErrorMessage>}
+            </FormControl>
+
+            <FormControl isInvalid={isPasswordError}>
+              <FormLabel>password</FormLabel>
+              <Input
+                type="password"
+                name="password"
+                value={password}
+                onChange={handleChange}
+                autoComplete="current-password"
+              />
+              {isPasswordError && <FormErrorMessage>Password는 8글자 이상이여야 합니다</FormErrorMessage>}
+            </FormControl>
+
+            {error && <Text color={"red.500"}>{error?.message || "somthing wrong"}</Text>}
+
+            <Button disabled={isInValid} type="submit">
+              로그인하기
+            </Button>
+          </Stack>
         </form>
-      </div>
-    </div>
+      </Box>
+    </Flex>
   );
 }
 
