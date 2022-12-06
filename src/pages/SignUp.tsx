@@ -1,9 +1,6 @@
 import { ChangeEvent, SyntheticEvent, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import APP_CONFIG from "../app-config";
-import LocalStorage from "../utils/localstorage";
-
-const { JWT_STORAGE_KEY } = APP_CONFIG;
+import useAuth from "../hooks/useAuth";
 
 const validation = {
   id: (value: string) => value.includes("@"),
@@ -14,31 +11,25 @@ function SignUp() {
   const navigate = useNavigate();
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
+  const { isLoading, isError, data, signIn, signUp, error } = useAuth();
 
   const isPass = validation["id"](id) && validation["password"](password);
 
   useEffect(() => {
-    // TODO
-    const JWT = LocalStorage.getItem(JWT_STORAGE_KEY);
-    if (JWT) {
-      console.log("있으니까 router");
+    if (!data) {
+      return;
     }
-    console.log("없으니까 현재그대로");
-  }, []);
+    navigate("/todo");
+  }, [data]);
 
-  const handleSubmit = (e: SyntheticEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!isPass) {
       return;
     }
 
-    // TODO: api 호출 전송
-    console.log(`API:login or signup ${id}, ${password}`);
-
-    // suces navigate
-
-    // error error처리
+    signIn({ email: id, password });
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -55,6 +46,7 @@ function SignUp() {
   return (
     <div>
       <div>
+        <p>{error?.message}</p>
         <form onSubmit={handleSubmit}>
           <label>
             <span>Id</span>
