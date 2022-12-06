@@ -1,4 +1,6 @@
-import React, { ChangeEvent, useState } from "react";
+import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
+import { Button, Checkbox, Flex, FormControl, FormLabel, Input, VisuallyHidden, VStack } from "@chakra-ui/react";
+import { ChangeEvent, useState } from "react";
 import { DeleteTodoParams, ITodo, UpdateTodoParams } from "../types/todo.type";
 
 interface TodoItemProps {
@@ -41,32 +43,60 @@ export default function TodoItem({ todo, onUpdate, onDelete }: TodoItemProps) {
   };
 
   return (
-    <div>
-      <input type="text" name="title" value={isEdit ? newText : title} disabled={!isEdit} onChange={handleTextChange} />
-      <input
-        type="checkbox"
-        name="isComplete"
-        checked={isEdit ? newIsComplete : isCompleted}
-        disabled={!isEdit}
-        onChange={toggleCompelte}
-      />
-      {!isEdit && (
-        <button type="button" onClick={() => openEdit()}>
-          수정모드
-        </button>
-      )}
-      {isEdit && (
-        <div>
-          <button type="button" onClick={() => handleEdit(id)}>
-            수정완료
-          </button>
-          <button type="button" onClick={handleCancel}>
-            수정취소
-          </button>
-        </div>
-      )}
+    <VStack spacing={4}>
+      <Flex mr={2} alignItems="center">
+        <FormControl flex="0.3" flexBasis="3">
+          <Flex alignItems="center" justifyContent="center">
+            <FormLabel fontSize="xs" m="0" mr={1}>
+              {(isEdit ? newIsComplete : isCompleted) === true ? "완료" : "미완료"}
+            </FormLabel>
+            <Checkbox
+              name="isComplete"
+              size="lg"
+              isChecked={isEdit ? newIsComplete : isCompleted}
+              isDisabled={!isEdit}
+              onChange={toggleCompelte}
+            />
+          </Flex>
+        </FormControl>
 
-      <button onClick={() => handleDelete(id)}>삭제</button>
-    </div>
+        <FormControl flex={1}>
+          <VisuallyHidden>
+            <FormLabel>할일입력</FormLabel>
+          </VisuallyHidden>
+          <Input
+            type="text"
+            name="title"
+            value={isEdit ? newText : title}
+            disabled={!isEdit}
+            onChange={handleTextChange}
+          />
+        </FormControl>
+      </Flex>
+
+      <Flex w="full" gap={2} justifyContent="flex-end">
+        {!isEdit && (
+          <Button type="button" onClick={() => openEdit()}>
+            <VisuallyHidden>수정모드</VisuallyHidden>
+            <EditIcon />
+          </Button>
+        )}
+
+        {isEdit && (
+          <Flex gap={1} mr={1}>
+            <Button type="submit" colorScheme="green" onClick={() => handleEdit(id)}>
+              완료
+            </Button>
+            <Button type="button" colorScheme="blackAlpha" onClick={handleCancel}>
+              취소
+            </Button>
+          </Flex>
+        )}
+        <Button colorScheme="red" onClick={() => handleDelete(id)}>
+          <VisuallyHidden>삭제</VisuallyHidden>
+          <DeleteIcon />
+        </Button>
+      </Flex>
+    </VStack>
   );
 }

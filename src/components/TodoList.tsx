@@ -1,5 +1,7 @@
-import React from "react";
+import { Box, List, ListItem, Text } from "@chakra-ui/react";
+
 import { DeleteTodoParams, ITodo, UpdateTodoParams } from "../types/todo.type";
+import NoContents from "./NoContents";
 import TodoItem from "./TodoItem";
 
 interface TodoListProps {
@@ -10,16 +12,20 @@ interface TodoListProps {
 
 export default function TodoList({ todos, onDelete, onUpdate }: TodoListProps) {
   if (!todos || todos.length === 0) {
-    return <div>할일이 없습니다</div>;
+    return (
+      <NoContents>
+        <Text>할일을 추가해보세요</Text>
+      </NoContents>
+    );
   }
 
   return (
-    <ul>
+    <List>
       {todos.map((todo) => (
-        <li key={todo.userId + todo.id}>
+        <ListItem key={todo.userId + todo.id}>
           <TodoItem todo={todo} onDelete={onDelete} onUpdate={onUpdate} />
-        </li>
+        </ListItem>
       ))}
-    </ul>
+    </List>
   );
 }

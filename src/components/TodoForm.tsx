@@ -1,4 +1,5 @@
-import React, { ChangeEvent, SyntheticEvent, useState } from "react";
+import { Button, Flex, FormControl, FormLabel, Input } from "@chakra-ui/react";
+import React, { ChangeEvent, FormEvent, useState } from "react";
 import { AddTodoParams } from "../types/todo.type";
 
 interface TodoFormProps {
@@ -9,20 +10,29 @@ function TodoForm({ onSubmit }: TodoFormProps) {
   const [todo, setTodo] = useState("");
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => setTodo(e.target.value);
 
-  const handleSubmit = (e: SyntheticEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     if (!todo.trim()) return;
     onSubmit({ todo });
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label>
-        할일
-        <input type="text" name="todos" placeholder="할일을 입력하세요" value={todo} onChange={handleChange} />
-      </label>
-      <button type="submit">추가</button>
-    </form>
+    <FormControl as="form" onSubmit={handleSubmit}>
+      <FormLabel>할일</FormLabel>
+      <Flex>
+        <Input
+          type="text"
+          name="todos"
+          placeholder="할일을 입력하세요"
+          value={todo}
+          onChange={handleChange}
+          borderRightRadius="0"
+        />
+        <Button borderLeftRadius="0" type="submit">
+          추가
+        </Button>
+      </Flex>
+    </FormControl>
   );
 }
 
