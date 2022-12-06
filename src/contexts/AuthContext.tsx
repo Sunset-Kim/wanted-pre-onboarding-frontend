@@ -45,7 +45,7 @@ const authReducers: Record<AuthActionsType, (state: AuthState, action?: AuthActi
   }),
   fetchError: (state, action) => {
     let error = undefined;
-
+    console.log(action);
     if (action?.payload) {
       error = action.payload as CustomApiError;
     }
@@ -83,9 +83,9 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
       if (error instanceof Response) {
         const apiError: CustomApiError = await error.json();
         dispatch({ type: "fetchError", payload: apiError });
+      } else {
+        dispatch({ type: "fetchError" });
       }
-
-      dispatch({ type: "fetchError" });
     } finally {
       dispatch({ type: "fetchEnd" });
     }
@@ -107,9 +107,9 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
       if (error instanceof Response) {
         const apiError: CustomApiError = await error.json();
         dispatch({ type: "fetchError", payload: apiError });
+      } else {
+        dispatch({ type: "fetchError" });
       }
-
-      dispatch({ type: "fetchError" });
     } finally {
       dispatch({ type: "fetchEnd" });
     }
