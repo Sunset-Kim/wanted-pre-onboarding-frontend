@@ -6,11 +6,10 @@ import TodoList from "../components/TodoList";
 import TodoService from "../services/TodoService";
 import { AddTodoParams, DeleteTodoParams, ITodo, UpdateTodoParams } from "../types/todo.type";
 import LocalStorage from "../utils/localstorage";
-import { MOCK_TODOS } from "../__mocks__/todos";
 
 export default function Todo() {
   const navigate = useNavigate();
-  const [todos, setTodos] = useState<ITodo[] | undefined>(MOCK_TODOS);
+  const [todos, setTodos] = useState<ITodo[] | undefined>();
 
   const getTodos = async () => {
     try {
