@@ -4,12 +4,14 @@ import { useNavigate } from "react-router-dom";
 import APP_CONFIG from "../app-config";
 import TodoForm from "../components/TodoForm";
 import TodoList from "../components/TodoList";
+import useAuth from "../hooks/useAuth";
 import TodoService from "../services/TodoService";
 import { AddTodoParams, DeleteTodoParams, ITodo, UpdateTodoParams } from "../types/todo.type";
 import LocalStorage from "../utils/localstorage";
 
 export default function Todo() {
   const navigate = useNavigate();
+  const { data } = useAuth();
   const [todos, setTodos] = useState<ITodo[] | undefined>();
 
   const getTodos = async () => {
@@ -54,17 +56,16 @@ export default function Todo() {
   };
 
   useEffect(() => {
-    const token = LocalStorage.getItem(APP_CONFIG.JWT_STORAGE_KEY);
-
-    if (!token || typeof token !== "string") {
-      LocalStorage.removeItem(APP_CONFIG.JWT_STORAGE_KEY);
+    if (!data) {
       navigate("/");
+      return;
     }
 
-    TodoService.token = token as string;
+    const { access_token } = data;
+    TodoService.token = access_token;
 
     fetchTodos();
-  }, []);
+  }, [data]);
 
   return (
     <Box minH="100vh">

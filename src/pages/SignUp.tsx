@@ -36,7 +36,7 @@ function SignUp() {
       return;
     }
 
-    isSignUp ? signUp({ email: id, password }) : signIn({ email: id, password });
+    mode === "signUp" ? signUp({ email: id, password }) : signIn({ email: id, password });
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {

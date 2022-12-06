@@ -4,14 +4,17 @@ import { RouterProvider } from "react-router-dom";
 import { ChakraProvider, Container } from "@chakra-ui/react";
 
 import router from "./router";
+import { AuthProvider } from "./contexts/AuthContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 root.render(
   <React.StrictMode>
     <ChakraProvider>
-      <Container py={5} w={"sm"} minH="100vh" h="full">
-        <RouterProvider router={router} />
-      </Container>
+      <AuthProvider>
+        <Container py={5} w={"sm"} minH="100vh" h="full">
+          <RouterProvider router={router} />
+        </Container>
+      </AuthProvider>
     </ChakraProvider>
   </React.StrictMode>
 );
