@@ -15,4 +15,8 @@ export default class LocalStorage {
       throw Error("Error, JSON stringify");
     }
   }
+
+  static removeItem(key: string) {
+    localStorage.removeItem(key);
+  }
 }

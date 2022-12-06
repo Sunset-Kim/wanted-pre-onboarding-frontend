@@ -1,27 +1,71 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import APP_CONFIG from "../app-config";
 import TodoForm from "../components/TodoForm";
 import TodoList from "../components/TodoList";
+import TodoService from "../services/TodoService";
+import { AddTodoParams, DeleteTodoParams, ITodo, UpdateTodoParams } from "../types/todo.type";
+import LocalStorage from "../utils/localstorage";
 import { MOCK_TODOS } from "../__mocks__/todos";
 
 export default function Todo() {
-  const [todos, setTodos] = useState(MOCK_TODOS);
+  const navigate = useNavigate();
+  const [todos, setTodos] = useState<ITodo[] | undefined>(MOCK_TODOS);
 
-  const addTodo = (value: string) => {
-    console.log(`API:createTodo! ${value}`);
+  const getTodos = async () => {
+    try {
+      return await TodoService.getTodos();
+    } catch (error) {
+      console.log("Error:API get");
+    }
   };
 
-  const updateTodo = ({ id, todo, isCompleted }: { id: number; todo: string; isCompleted: boolean }) => {
-    console.log(`API:updateTodo ${id}, ${todo}, ${isCompleted}`);
+  const fetchTodos = async () => {
+    const todos = await getTodos();
+    setTodos(todos);
   };
 
-  const deleteTodo = (id: number) => {
-    console.log(`API:delete ${id}`);
+  const addTodo = async (params: AddTodoParams) => {
+    try {
+      await TodoService.addTodo(params);
+      await fetchTodos();
+    } catch (error) {
+      console.log("Error:API add");
+    }
+  };
+
+  const updateTodo = async (params: UpdateTodoParams) => {
+    try {
+      await TodoService.updateTodo(params);
+      await fetchTodos();
+    } catch (error) {
+      console.log("Error:API update");
+    }
+  };
+
+  const deleteTodo = async (params: DeleteTodoParams) => {
+    try {
+      await TodoService.deleteTodo(params);
+      await fetchTodos();
+    } catch (error) {
+      console.log(error);
+      console.log("Error:API delete");
+    }
   };
 
   useEffect(() => {
-    //TODO: todos 조회
-    console.log("API: GET TODOS");
+    const token = LocalStorage.getItem(APP_CONFIG.JWT_STORAGE_KEY);
+
+    if (!token || typeof token !== "string") {
+      LocalStorage.removeItem(APP_CONFIG.JWT_STORAGE_KEY);
+      navigate("/");
+    }
+
+    TodoService.token = token as string;
+
+    fetchTodos();
   }, []);
+
   return (
     <div>
       <TodoForm onSubmit={addTodo} />

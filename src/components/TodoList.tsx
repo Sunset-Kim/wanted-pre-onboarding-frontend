@@ -1,11 +1,11 @@
 import React from "react";
-import { ITodo } from "../types/todo.type";
+import { DeleteTodoParams, ITodo, UpdateTodoParams } from "../types/todo.type";
 import TodoItem from "./TodoItem";
 
 interface TodoListProps {
   todos?: ITodo[];
-  onUpdate: ({ id, todo, isCompleted }: { id: number; todo: string; isCompleted: boolean }) => void;
-  onDelete: (id: number) => void;
+  onUpdate: (params: UpdateTodoParams) => void;
+  onDelete: (params: DeleteTodoParams) => void;
 }
 
 export default function TodoList({ todos, onDelete, onUpdate }: TodoListProps) {

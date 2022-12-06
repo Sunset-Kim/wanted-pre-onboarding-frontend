@@ -6,7 +6,9 @@ export default async function request<T>(url: string, options?: RequestInit) {
       throw response;
     }
 
-    const result: T = await response.json();
+    const result: T = await response.json().catch((err) => {
+      return null;
+    });
     return result;
   } catch (error) {
     throw error;
