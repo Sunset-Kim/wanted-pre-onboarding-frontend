@@ -18,5 +18,5 @@ npm run start
 # 데모영상
 - 데모영상은 실제 배포주소로 대체하였습니다.
 
-# 배포 주
+# 배포 주소
 [gh-page 바로가기] (https://sunset-kim.github.io/wanted-pre-onboarding-frontend/)
