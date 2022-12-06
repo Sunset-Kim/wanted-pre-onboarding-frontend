@@ -1,4 +1,4 @@
-import { Box, List, ListItem, Text } from "@chakra-ui/react";
+import { List, ListItem, Text } from "@chakra-ui/react";
 
 import { DeleteTodoParams, ITodo, UpdateTodoParams } from "../types/todo.type";
 import NoContents from "./NoContents";
