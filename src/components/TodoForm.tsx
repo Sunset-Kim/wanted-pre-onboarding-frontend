@@ -20,7 +20,7 @@ function TodoForm({ onSubmit }: TodoFormProps) {
 
   return (
     <FormControl as="form" onSubmit={handleSubmit}>
-      <FormLabel>할일</FormLabel>
+      <FormLabel>할일 추가</FormLabel>
       <Flex>
         <Input
           type="text"

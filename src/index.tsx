@@ -9,7 +9,7 @@ const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement)
 root.render(
   <React.StrictMode>
     <ChakraProvider>
-      <Container w={"sm"} minH="100vh" h="full">
+      <Container py={5} w={"sm"} minH="100vh" h="full">
         <RouterProvider router={router} />
       </Container>
     </ChakraProvider>

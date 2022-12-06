@@ -20,7 +20,7 @@ export default function TodoList({ todos, onDelete, onUpdate }: TodoListProps) {
   }
 
   return (
-    <List>
+    <List width="full" spacing={2}>
       {todos.map((todo) => (
         <ListItem key={todo.userId + todo.id}>
           <TodoItem todo={todo} onDelete={onDelete} onUpdate={onUpdate} />

@@ -1,4 +1,4 @@
-import { Flex, VStack } from "@chakra-ui/react";
+import { Box, VStack } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import APP_CONFIG from "../app-config";
@@ -67,11 +67,11 @@ export default function Todo() {
   }, []);
 
   return (
-    <Flex minH="100vh">
-      <VStack>
+    <Box minH="100vh">
+      <VStack width="full" spacing={4}>
         <TodoForm onSubmit={addTodo} />
         <TodoList todos={todos} onDelete={deleteTodo} onUpdate={updateTodo} />
       </VStack>
-    </Flex>
+    </Box>
   );
 }
