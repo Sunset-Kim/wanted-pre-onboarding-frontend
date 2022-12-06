@@ -8,12 +8,14 @@ interface TodoFormProps {
 
 function TodoForm({ onSubmit }: TodoFormProps) {
   const [todo, setTodo] = useState("");
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => setTodo(e.target.value);
+  const isInValid = todo.trim() === "";
 
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => setTodo(e.target.value);
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    if (!todo.trim()) return;
+    if (isInValid) return;
     onSubmit({ todo });
+    setTodo("");
   };
 
   return (
@@ -28,7 +30,7 @@ function TodoForm({ onSubmit }: TodoFormProps) {
           onChange={handleChange}
           borderRightRadius="0"
         />
-        <Button borderLeftRadius="0" type="submit">
+        <Button disabled={isInValid} colorScheme="green" borderLeftRadius="0" type="submit">
           추가
         </Button>
       </Flex>
